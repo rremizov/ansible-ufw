@@ -18,7 +18,7 @@
 - name: Whitelist SSH port
   ufw: rule={{ item.rule }} port={{ item.port }} proto={{ item.proto }}
   with_items:
-    - { rule: "limit", port: '{{ ssh_port | default("22") }}', proto: "tcp" }
+    - { rule: "limit", port: '{{ ssh_port | default(ansible_port) }}', proto: "tcp" }
   notify:
     - restart ufw
 
