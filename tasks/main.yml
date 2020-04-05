@@ -12,15 +12,11 @@
   with_items:
     - { direction: "incoming", policy: "deny" }
     - { direction: "outgoing", policy: "allow" }
-  notify:
-    - restart ufw
 
 - name: Whitelist SSH port
   ufw: rule={{ item.rule }} port={{ item.port }} proto={{ item.proto }}
   with_items:
     - { rule: "limit", port: '{{ ansible_port | default(22) }}', proto: "tcp" }
-  notify:
-    - restart ufw
 
 - name: Configure ufw rules
   ufw:
@@ -32,8 +28,6 @@
     delete: "{{ item.delete|default('no') }}"
     comment: "{{ item.comment|default('') }}"
   with_items: "{{ ufw_rules }}"
-  notify:
-    - restart ufw
 
 - name: Enable UFW logging
   ufw: logging=on
