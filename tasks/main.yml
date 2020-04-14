@@ -39,3 +39,4 @@
     state: enabled
   notify:
     - restart ufw
+  when: ufw_enabled
