@@ -16,12 +16,12 @@
 - name: Whitelist SSH port
   ufw: rule={{ item.rule }} port={{ item.port }} proto={{ item.proto }}
   with_items:
-    - { rule: "limit", port: '{{ ansible_port | default(22) }}', proto: "tcp" }
+    - { rule: "limit", port: "{{ ansible_port | default(22) }}", proto: "tcp" }
 
 - name: Configure ufw rules
   ufw:
     rule: "{{ item.rule }}"
-    port: "{{ item.port }}"
+    port: "{{ item.port|default(omit) }}"
     direction: "{{ item.direction }}"
     from: "{{ item.from }}"
     proto: "{{ item.proto }}"
