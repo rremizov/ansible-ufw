@@ -8,7 +8,7 @@ Install Uncomplicated Firewall and configure rules.
 Features
 --------
 
-- Default policy to deny all incoming connections (except SSH port).
+- Default deny incoming, allow outgoing, with SSH port rate-limited.
 
 Requirements
 ------------
@@ -17,6 +17,11 @@ Requirements
 
 Role Vars
 ---------
+
+``ufw_enabled``
+~~~~~~~~~~~~~~
+
+Boolean. Enables UFW when ``true``. Default: ``true``.
 
 ``ufw_rules``
 ~~~~~~~~~~~~~
@@ -42,4 +47,4 @@ Example
         from: "any"
         proto: "tcp"
 
-.. _ufw:: https://docs.ansible.com/ansible/latest/modules/ufw_module.html
+.. _ufw: https://docs.ansible.com/ansible/latest/modules/ufw_module.html

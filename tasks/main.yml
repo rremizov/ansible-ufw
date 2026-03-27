@@ -1,6 +1,6 @@
 ---
 - name: Install UFW
-  apt:
+  ansible.builtin.apt:
     name: "{{ packages }}"
     state: present
   vars:
@@ -8,35 +8,41 @@
       - ufw
 
 - name: Configure ufw defaults
-  ufw: direction={{ item.direction }} policy={{ item.policy }}
+  community.general.ufw:
+    direction: "{{ item.direction }}"
+    policy: "{{ item.policy }}"
   with_items:
     - { direction: "incoming", policy: "deny" }
     - { direction: "outgoing", policy: "allow" }
 
 - name: Whitelist SSH port
-  ufw: rule={{ item.rule }} port={{ item.port }} proto={{ item.proto }}
+  community.general.ufw:
+    rule: "{{ item.rule }}"
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
   with_items:
     - { rule: "limit", port: "{{ ansible_port | default(22) }}", proto: "tcp" }
 
 - name: Configure ufw rules
-  ufw:
+  community.general.ufw:
     rule: "{{ item.rule }}"
-    port: "{{ item.port|default(omit) }}"
+    port: "{{ item.port | default(omit) }}"
     direction: "{{ item.direction }}"
     from: "{{ item.from }}"
     proto: "{{ item.proto }}"
-    delete: "{{ item.delete|default('no') }}"
-    comment: "{{ item.comment|default('') }}"
+    delete: "{{ item.delete | default('no') }}"
+    comment: "{{ item.comment | default('') }}"
   with_items: "{{ ufw_rules }}"
 
 - name: Enable UFW logging
-  ufw: logging=on
+  community.general.ufw:
+    logging: "on"
   notify:
-    - restart ufw
+    - Restart ufw
 
 - name: Enable UFW
-  ufw:
+  community.general.ufw:
     state: enabled
   notify:
-    - restart ufw
+    - Restart ufw
   when: ufw_enabled
